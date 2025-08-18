@@ -56,9 +56,11 @@ L.Control.Mouse = L.Control.extend({
     onAdd: function (map) {
         var self = this;
         this._map = map;
+        this.search = null;
         this._controls = {};
         this._container = L.DomUtil.create('div', 'leaflet-control-mouseposition');
         this._containerCont = L.DomUtil.create('div', 'racontainer', this._container);
+        this._containerSearch = L.DomUtil.create('div', 'icon search', this._containerCont);
         this._containerIcon = L.DomUtil.create('div', 'icon grid mouse', this._containerCont);
         this._containerGR = L.DomUtil.create('div', 'gr', this._containerCont);
         this._containerCont = L.DomUtil.create('div', 'clear', this._container);
@@ -66,6 +68,8 @@ L.Control.Mouse = L.Control.extend({
         L.DomEvent.disableClickPropagation(this._container);
         this._container.style.display = 'none';
         this._containerIcon.title = 'Change display of UK OS grid';
+        this._containerSearch.title = 'Search for a specific loacation';
+        this._containerSearch.style.display = 'none';
         map.on('mousemove', this._updateMouseMove, this);
         map.on('zoomend', this._updateZoom, this);
         map.on('moveend', this._moveEnd, this);
@@ -78,7 +82,7 @@ L.Control.Mouse = L.Control.extend({
             self._container.style.display = 'inherit';
         });
         map.on('mouseout', function () {
-            self._container.style.display = 'none';
+            //        self._container.style.display = 'none';
             switch (self._userOptions.OSgridOption) {
                 case 'mouse':
                     self.OSGridSquareLayer.clearLayers();
@@ -104,7 +108,16 @@ L.Control.Mouse = L.Control.extend({
             self._setFormAttributes();
             self._updateZoom();
         });
+        this._containerSearch.addEventListener('click', (e) => {
+            if (this.search !== null) {
+                this.search.click();
+            }
+        });
         return this._container;
+    },
+    addSearch: function (search) {
+        this.search = search;
+        this._containerSearch.style.display = 'inherit';
     },
     changeDisplay: function (display) {
         if (!L.Browser.mobile) {
@@ -254,8 +267,13 @@ L.Control.Mouse = L.Control.extend({
                     gr = '';
                     size = '';
             }
-            out = 'Size ' + size + '<br/><span class="osgridref">' + gr + "</span>";
+            if (this._userOptions.OSgridOption === 'none') {
+                out = '<br/><span class="osgridref">' + this._mapState.gridRef6 + "</span>";
+            } else {
+                out = 'Size ' + size + '<br/><span class="osgridref">' + gr + "</span>";
+            }
         }
+
         if (this._userOptions.displayZoom) {
             out += "   Zoom[" + this._mapState.zoom.toFixed(2) + "]";
         }
