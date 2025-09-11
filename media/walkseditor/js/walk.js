@@ -162,8 +162,11 @@ ra.walkseditor.walks = function () {
             walk.initialiseFilter(filter);
         });
         filter.display(tag);
-        filter.activateFilterItem("idWhen", "Future");
-        filter.activateFilterItem("idWhen", "Not defined");
+
+    };
+    this.setFilterDefaults = function () {
+        this.filter.activateFilterItem("idWhen", "Future");
+        this.filter.activateFilterItem("idWhen", "Not defined");
     };
 };
 ra.walkseditor.walk = function () {
@@ -349,7 +352,7 @@ ra.walkseditor.walk = function () {
         classes.forEach(c => {
             out.push(c);
         });
-       
+
         return out;
     };
     this.dateSet = function () {
@@ -878,7 +881,7 @@ ra.walkseditor.walk = function () {
                 }
                 switch (view) {
                     case 'table':
-                        return  "<b>" + ra.date.dowdd(d) + "</b><br/>" + " " + ra.date.month(d) + " " + ra.date.YY(d) + past;
+                        return  "<b>" + ra.date.dowdd(d) + "</b><br/>" + " " + ra.date.month(d) + " " + ra.date.YY(d);
                     case 'list':
                     case 'details':
                         return  "<b>" + ra.date.dowdd(d) + "</b>" + " " + ra.date.month(d) + " " + ra.date.YY(d) + past;

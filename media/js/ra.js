@@ -304,7 +304,7 @@ ra.isES6 = function () {
     }
 };
 ra.hasMouse = function () {
-   return matchMedia('(pointer:fine)').matches;
+    return matchMedia('(pointer:fine)').matches;
 };
 ra.isRealOject = function (obj) {
     return typeof obj === "object" && obj !== null && obj !== 'undefined';
@@ -453,7 +453,7 @@ ra.logger = (function () {
         data.forEach(function (value, index) {
             formData.append("item" + index, value);
         });
-        xmlhttp = new XMLHttpRequest();
+        var xmlhttp = new XMLHttpRequest();
         xmlhttp.onload = function () {
             //  if (xmlhttp.status === 200) {
             //      console.log(xmlhttp.responseText);

@@ -2197,7 +2197,6 @@ ra.walk = (function () {
     // accessed by HTML links to display walk
     my.displayWalkID = function (event, id) {
         var walk = my.walks.getEvent(id);
-        var evs = my.walks.filteredEvents();
         if (walk !== null) {
             walk.displayInModal(event);
         } else {

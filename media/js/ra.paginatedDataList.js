@@ -38,6 +38,7 @@ ra.paginatedTable = function (tag, userOptions = null) {
     this.cvListOptions = {...this.defaultOptions, ...userOptions};
     this.fields = [];
     this.format = null;
+    this.defaultSort = [];
     this.noColumns = 1;
     var tags = [
         {name: 'home', parent: 'root', tag: 'div', attrs: {class: this.options.className}},
@@ -101,9 +102,10 @@ ra.paginatedTable = function (tag, userOptions = null) {
 //            "view": "notTablet" or "notMobile"
 //        },
 //        "field": {
-//            "type": "number",
+//            "type": "number","text","date"
 //            "filter": false,
-//            "sort": true
+//            "sort": true,
+//            "defaultSort": 'Asc' or 'Desc' 
 //        },
 //        view: 'notTablet' or 'notMobile'
 //    }, {...}
@@ -131,7 +133,12 @@ ra.paginatedTable = function (tag, userOptions = null) {
                 if (item.field.sort) {
                     var field = this.fields[item.title];
                     field.addSortArrows(th);
+                    if (item.field.defaultSort) {
+                        var item = {field: field, direction: item.field.defaultSort};
+                        this.defaultSort.push(item);
+                    }
                 }
+
             }
         });
         this.elements.thead.appendChild(row);
@@ -183,6 +190,18 @@ ra.paginatedTable = function (tag, userOptions = null) {
             this.elements.rapagination1.style.display = 'none';
             this.elements.rapagination2.style.display = 'none';
         }
+        this.defaultSort.forEach(item => {
+            switch (item.direction) {
+                case 'Asc':
+                    item.field.sort(1);
+                    break;
+                case 'Desc':
+                    item.field.sort(-1);
+                    break;
+                default:
+                    alert('order error');
+            }
+        });
     };
     this.sort = function (param, order) {
         var field = this.fields[param];

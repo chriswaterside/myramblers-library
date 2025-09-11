@@ -12,6 +12,7 @@
     border-color: #777777;
     border-style: solid;
     color: #333;
+    min-width: 150px;
 }
 .racontainer {
     min-width:120px;

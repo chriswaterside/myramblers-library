@@ -18,7 +18,7 @@ ra.walkseditor.viewWalks = function (tag, mapOptions, programme, loggedOn = fals
     };
     this.tableColumns = [
         {title: 'Status'},
-        {title: 'Date', field: {type: 'text', sort: true, filter: false}},
+        {title: 'Date', field: {type: 'date', sort: true, filter: false, defaultSort:'Desc'}},
         {title: 'Meeting', field: {type: 'text', sort: false, filter: false}},
         {title: 'Start', field: {type: 'text', sort: false, filter: false}},
         {title: 'Title', field: {type: 'text', sort: false, filter: true}},
@@ -30,7 +30,7 @@ ra.walkseditor.viewWalks = function (tag, mapOptions, programme, loggedOn = fals
         var self = this;
         var head = document.createElement('h3');
         head.innerHTML = 'Walks editor: ' + status;
-        this.programme.setFilters(tag);
+
         tag.appendChild(head);
         var options = {
             tabClass: 'walksView',
@@ -38,7 +38,8 @@ ra.walkseditor.viewWalks = function (tag, mapOptions, programme, loggedOn = fals
                 list: {title: 'List'},
                 map: {title: 'Map'},
                 calendar: {title: 'Calendar'}}};
-        this.tabs = new ra.tabs(tag, options);
+        this.programme.setFilters(tag); 
+        this.tabs = new ra.tabs(tag, options);   
         document.addEventListener("reDisplayWalks", function () {
             self.programme.setWalkDisplay();
             //  self.removeRecordDisplay();
@@ -51,7 +52,9 @@ ra.walkseditor.viewWalks = function (tag, mapOptions, programme, loggedOn = fals
             console.log('Walks level ' + self.option);
             self.displayWalks(self.displayTag, self.option);
         });
+   
         this.tabs.display();
+        this.programme.setFilterDefaults();
     };
 
     this.displayWalks = function (tag, option) {

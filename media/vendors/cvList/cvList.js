@@ -48,7 +48,7 @@ cvList = function (displayTag) {
         var self = this;
         this._fields._display();
         this._calcKeys();
-        this._display(this);
+        this._display();
         const idleTime = 300; // milliseconds     
         //  let mouseStopTimer;
         this._displayTag.addEventListener("cvList-redisplay", function (e) {
@@ -57,7 +57,7 @@ cvList = function (displayTag) {
         this._displayTag.addEventListener("cvList-reCalcKeys", function (e) {
             self._calcKeys();
             //  console.log('Done');
-            self._display(self);
+            self._display();
         });
     };
     this.createField = function (title, type) {
@@ -488,7 +488,7 @@ cvListFieldNumber = function (displayTag, title, no) {
     this._shouldDisplayItem = function (item) {
         var value = 0;
         // parent
-       value =  this._getItemValue('data-cvListNumberField', item);
+        value = this._getItemValue('data-cvListNumberField', item);
         if (value === null) {
             return false;
         }
@@ -576,7 +576,7 @@ cvListFieldDate = function (displayTag, title, no) {
     this._shouldDisplayItem = function (item) {
         var value = 0;
         // parent
-       value =  this._getItemValue('data-cvListDateField', item);
+        value = this._getItemValue('data-cvListDateField', item);
         if (value === null) {
             return false;
         }
@@ -600,7 +600,11 @@ cvListFieldDate = function (displayTag, title, no) {
                 d = new Date(txt);
             }
             if (!this.isValidDate(d)) {
-                d = new Date('01-01-1970');
+                if (order === 1) {
+                    d = new Date('01-01-1970');
+                } else {
+                    d = new Date('01-01-2999');
+                }
             }
             values.push({key: key, value: d});
 

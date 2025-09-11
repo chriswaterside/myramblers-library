@@ -82,7 +82,7 @@ L.Control.Mouse = L.Control.extend({
             self._container.style.display = 'inherit';
         });
         map.on('mouseout', function () {
-            //        self._container.style.display = 'none';
+            self._container.style.display = 'none';
             switch (self._userOptions.OSgridOption) {
                 case 'mouse':
                     self.OSGridSquareLayer.clearLayers();
@@ -268,7 +268,7 @@ L.Control.Mouse = L.Control.extend({
                     size = '';
             }
             if (this._userOptions.OSgridOption === 'none') {
-                out = '<br/><span class="osgridref">' + this._mapState.gridRef6 + "</span>";
+                out = '<span class="osgridref">' + this._mapState.gridRef6 + "</span>";
             } else {
                 out = 'Size ' + size + '<br/><span class="osgridref">' + gr + "</span>";
             }
