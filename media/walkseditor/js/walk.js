@@ -310,6 +310,9 @@ ra.walkseditor.walk = function () {
         }
     };
     this.createFromObject = function (data) {
+        if (typeof data.admin !== 'undefined') {
+            this.data.admin = data.admin;
+        }
         if (typeof data.basics !== 'undefined') {
             this.data.basics = data.basics;
         }
