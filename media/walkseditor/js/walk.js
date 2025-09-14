@@ -876,7 +876,7 @@ ra.walkseditor.walk = function () {
     this.getWalkDate = function (view) {
         var d = ra.getObjProperty(this.data, 'basics.date');
         var past = '';
-        if (d !== null) {
+        if (d !== null && d !== '') {
             if (ra.date.isValidString(d)) {
                 var status = this.dateStatus();
                 if (status === ra.walkseditor.DATETYPE.Past) {
@@ -894,6 +894,15 @@ ra.walkseditor.walk = function () {
             }
         }
         return 'Date not defined';
+    };
+    this.getWalkSortDate = function () {
+        var d = ra.getObjProperty(this.data, 'basics.date');
+        if (d !== null && d !== '') {
+            if (ra.date.isValidString(d)) {
+                return ra.date.getDateTime(d);
+            }
+        }
+        return null;
     };
     this.getWalkBasics = function (view) {
         switch (view) {

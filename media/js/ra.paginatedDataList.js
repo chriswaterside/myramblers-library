@@ -147,7 +147,7 @@ ra.paginatedTable = function (tag, userOptions = null) {
         this.row = document.createElement("tr");
         return this.row;
     };
-    this.tableRowItem = function (value, item = null) {
+    this.tableRowItem = function (value, item = null, sortValue = null) {
         var td = document.createElement("td");
         td.innerHTML = value;
         this.row.appendChild(td);
@@ -155,6 +155,9 @@ ra.paginatedTable = function (tag, userOptions = null) {
             if ('field' in item) {
                 var field = this.fields[item.title];
                 field.setValue(td, value);
+                if (sortValue!==null){
+                     field.setSortValue(td, sortValue);
+                }
             }
             if ('options' in item) {
                 var options = item.options;
