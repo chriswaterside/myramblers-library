@@ -45,15 +45,14 @@ div.leaflet-control-rightclick-container div.remove{
     padding-bottom:3px;
 }
 
-select.ra-mouse-options {
+div.ra-mouse-options {
     color:var(--pantone0159);
     border-radius: 10px;
-    font-size:20px;
+    font-family: "Assistant" !important;
     margin-left: 20px;
     width: auto;
 }
 div.ra-mouse-option{
-
     height:20px;
 }
 div.ra-mouse-option a img{

@@ -29,7 +29,6 @@ ra.defaultMapOptions = {
     displayElevation: null,
     licenseKeys: {
         ORSkey: null,
-        bingkey: "",
         OSTestkey: "",
         OSkey: "",
         mapBoxkey: null,
@@ -452,13 +451,14 @@ ra.logger = (function () {
         var formData = new FormData();
         data.forEach(function (value, index) {
             formData.append("item" + index, value);
+            //  console.log('Logging', value);
         });
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onload = function () {
             //  if (xmlhttp.status === 200) {
             //      console.log(xmlhttp.responseText);
             //  } else {
-            console.log('Logging status:', xmlhttp.status);
+            //  console.log('Logging status:', xmlhttp.status);
             //  }
         };
         xmlhttp.open("POST", url, true);
@@ -1665,12 +1665,20 @@ ra.modals = (function () {
     };
     document.addEventListener("ra-modal-closing", function (event) {
         //modals.diag("Closing");
-        modals._items.pop();
+        var modalToClose = event.raModal;
+        var i = modals._items.indexOf(modalToClose);
+        if (i < 0) {
+            return;
+        }
+        var last = i + 1 === modals._items.length;
+        modals._items.splice(i, 1);
         if (modals._items.length === 0) {
             modals.masterdiv.innerHTML = '';
         } else {
-            var item = modals._items[modals._items.length - 1];
-            ra.html.setTag(modals.masterdiv, item.getContent());
+            if (last) {
+                var item = modals._items[modals._items.length - 1];
+                ra.html.setTag(modals.masterdiv, item.getContent());
+            }
         }
         // modals.diag("Closing after");
     });
@@ -1719,6 +1727,7 @@ ra.modal = function () {
     };
     this.close = function () {
         let e = new Event("ra-modal-closing");
+        e.raModal = this;
         document.dispatchEvent(e);
         event.stopImmediatePropagation();
         if (this._fullScreenElement !== null) {

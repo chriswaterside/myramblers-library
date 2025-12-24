@@ -27,8 +27,6 @@ class RWalkseditor {
         //  RLoad::addScript($path . "js/walksprogramme.js", "text/javascript");
         RLoad::addScript($path . "js/viewWalks.js", "text/javascript");
         $doc = Factory::getDocument();
-        //    $doc->addScript("https://cdn.quilljs.com/1.3.7/quill.js");
-        //    $doc->addStyleSheet("https://cdn.quilljs.com/1.3.7/quill.snow.css", "text/css");
         $doc->addScript("https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js");
         $doc->addStyleSheet("https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css", "text/css");
         RLoad::addScript("media/lib_ramblers/js/ra.tabs.js");

@@ -10,7 +10,9 @@ ra.events = function () {
     this.events = [];
     this.filter = null;
     this.registerEvent = function (event) {
-        this.events.push(event);
+        if (event.getIntValue('basics', 'future')) {
+            this.events.push(event);
+        }
     };
     this.getEvent = function (id) {
         var item = this.events.find(o => o.admin.id === id);
@@ -1030,6 +1032,9 @@ ra.event.basics = function () {
                     } while (ra.date.YYYYMMDD(this.finishDate) > ra.date.YYYYMMDD(endDate));
                 }
                 return dsow;
+            case "future":
+                return this.walkDate > new Date();
+                ;
         }
         console.log("Invalid internal request: " + $option);
         return "";

@@ -1306,9 +1306,11 @@ L.Control.Rightclick = L.Control.extend({
         var title3 = document.createElement('h2');
         title3.textContent = 'Select which information should be displayed';
         tag.appendChild(title3);
+        var div = document.createElement('div');
+         div.setAttribute('class', 'ra-mouse-options');
+        tag.appendChild(div);
         var so = document.createElement('select');
-        so.setAttribute('class', 'ra-mouse-options');
-        // so.setAttribute('size', '13');
+       // so.setAttribute('class', 'ra-mouse-options');
         so.title = "Select which information is displayed";
         this.rightClickOptions.forEach((group) => {
             var gr = document.createElement("optgroup");
@@ -1322,7 +1324,7 @@ L.Control.Rightclick = L.Control.extend({
             so.appendChild(gr);
         });
         so.value = this.rightClickOption;
-        tag.appendChild(so);
+        div.appendChild(so);
         var _this = this;
         so.addEventListener("change", function (e) {
             _this.rightClickOption = so.value;

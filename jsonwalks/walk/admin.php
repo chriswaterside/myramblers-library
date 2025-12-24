@@ -113,7 +113,7 @@ class RJsonwalksWalkAdmin implements JsonSerializable {
         return $walkadmin->id === $this->id;
     }
 
-    public function hasBooking($ids) {
+    public function isInArray($ids) {
         return in_array($this->id, $ids);
     }
 
