@@ -881,7 +881,7 @@ L.Control.Rightclick = L.Control.extend({
             desc += "<br/><b>Grid Reference: </b>" + gr +
                     "<br/><b>Grid Reference: </b>" + gr10 + " (8 Figure)";
             links += '<a href="javascript:ra.link.photos(\'' + gr10 + '\')">[Photos]</a>';
-            links += '<a href="javascript:ra.link.streetmap(' + e.latlng.lat.toFixed(7) + ',' + e.latlng.lng.toFixed(7) + ')">[OS Map]</a>';
+           // links += '<a href="javascript:ra.link.streetmap(' + e.latlng.lat.toFixed(7) + ',' + e.latlng.lng.toFixed(7) + ')">[OS Map]</a>';
         } else {
             desc += "<br/>Outside UK OS Grid";
         }

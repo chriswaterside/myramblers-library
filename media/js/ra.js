@@ -471,12 +471,21 @@ ra.cookie = (function () {
     var cookie = {};
     cookie.create = function (raobject, name, days) {
         var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toGMTString();
+        switch (true) {
+            case (days < 0):
+                return;
+            case (days === null):
+                return;
+            case (days === 0):
+                expires = '';
+                break;
+            case (days > 0):
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toGMTString();
         }
         document.cookie = name + "=" + raobject + expires + "; path=/;samesite=Strict";
+
     };
     cookie.read = function (name) {
         var nameEQ = name + "=";
@@ -1491,10 +1500,10 @@ if (typeof (ra.html.input) === "undefined") {
 ra.link = (function () {
     var link = {};
     link.getOSMap = function (lat, long, text) {
-        var $out;
-        $out = "<abbr title='Click Map to see Ordnance Survey map of location'>";
-        $out = "<a class='mappopup' href=\"javascript:ra.link.streetmap(" + lat + "," + long + ")\" >[" + text + "]</a>";
-        $out += "</abbr>";
+        var $out='';
+//        $out = "<abbr title='Click Map to see Ordnance Survey map of location'>";
+//        $out = "<a class='mappopup' href=\"javascript:ra.link.streetmap(" + lat + "," + long + ")\" >[" + text + "]</a>";
+//        $out += "</abbr>";
         return $out;
     };
     link.getAreaMap = function ($location, $text) {
@@ -1516,8 +1525,8 @@ ra.link = (function () {
     };
     link.streetmap = function (lat, long) {
         ////https://streetmap.co.uk/loc/N52.038333,W4.578611
-        var page = "https://www.streetmap.co.uk/loc/N" + lat + ",E" + long;
-        window.open(page, "_blank", "scrollbars=yes,width=900,height=580,menubar=yes,resizable=yes,status=yes");
+  //      var page = "https://www.streetmap.co.uk/loc/N" + lat + ",E" + long;
+  //      window.open(page, "_blank", "scrollbars=yes,width=900,height=580,menubar=yes,resizable=yes,status=yes");
     };
     link.googlemap = function ($lat, $long) {
         var page = "https://www.google.com/maps/place/" + $lat.toString() + "+" + $long.toString() + "/@" + $lat.toString() + "," + $long.toString() + ",15z";

@@ -1033,8 +1033,11 @@ ra.event.basics = function () {
                 }
                 return dsow;
             case "future":
-                return this.walkDate > new Date();
-                ;
+                const today = new Date();
+                const yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+                return this.walkDate > yesterday;
+                
         }
         console.log("Invalid internal request: " + $option);
         return "";
@@ -1314,9 +1317,9 @@ ra.event.timelocation = function () {
                 out = this.w3w;
                 break;
             case "{OSMap}":
-                var $lat = this.latitude;
-                var $long = this.longitude;
-                out = ra.link.getOSMap($lat, $long, "OS Map");
+            //    var $lat = this.latitude;
+             //   var $long = this.longitude;
+             //   out = ra.link.getOSMap($lat, $long, "OS Map");
                 break;
             case "{Directions}":
                 var $lat = this.latitude;
@@ -1431,10 +1434,10 @@ ra.event.timelocation = function () {
             var w3w = document.createElement('div');
             tag.appendChild(w3w);
             w3w.innerHTML = ra.w3w.toText(this.w3w, "");
-            var span1 = document.createElement('span');
-            span1.title = "Click to see new window showing location using Streetmap.co.uk";
-            tag.appendChild(span1);
-            span1.innerHTML = ra.link.getOSMap(this.latitude, this.longitude, "Streetmap/OS Map");
+//            var span1 = document.createElement('span');
+//            span1.title = "Click to see new window showing location using Streetmap.co.uk";
+//            tag.appendChild(span1);
+//            span1.innerHTML = ra.link.getOSMap(this.latitude, this.longitude, "Streetmap/OS Map");
             var a = document.createElement('a');
             tag.appendChild(a);
             a.classList.add("mappopup");

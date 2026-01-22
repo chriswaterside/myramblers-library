@@ -376,7 +376,7 @@ L.Control.Places = L.Control.extend({
         div.appendChild(self._getResultDiv(gr));
         div.appendChild(self._getGRDiv(gr8));
         div.appendChild(self._getDetails(json.records));
-        div.appendChild(self._getStreetMapLink(latlng));
+      //  div.appendChild(self._getStreetMapLink(latlng));
         div.appendChild(self._getGoogleMapLink(latlng));
         div.appendChild(self._displayAgreement());
 
@@ -444,17 +444,17 @@ L.Control.Places = L.Control.extend({
         });
         return element;
     },
-    _getStreetMapLink: function (latlng) {
-        var element = document.createElement('span');
-        element.setAttribute('class', 'placebutton-green hasTip');
-        element.setAttribute('title', 'View location in streetmap.co.uk');
-        var a = document.createElement('a');
-        a.setAttribute('href', "javascript:ra.link.streetmap(" + latlng.lat + "," + latlng.lng + ")");
-        a.textContent = 'Streemap';
-        a.style.fontSize = '12px';
-        element.appendChild(a);
-        return element;
-    },
+//    _getStreetMapLink: function (latlng) {
+//        var element = document.createElement('span');
+//        element.setAttribute('class', 'placebutton-green hasTip');
+//        element.setAttribute('title', 'View location in streetmap.co.uk');
+//        var a = document.createElement('a');
+//        a.setAttribute('href', "javascript:ra.link.streetmap(" + latlng.lat + "," + latlng.lng + ")");
+//        a.textContent = 'Streemap';
+//        a.style.fontSize = '12px';
+//        element.appendChild(a);
+//        return element;
+//    },
     _getGoogleMapLink: function (latlng) {
         var element = document.createElement('span');
         element.setAttribute('class', 'placebutton-green hasTip');
