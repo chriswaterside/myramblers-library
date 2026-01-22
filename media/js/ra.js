@@ -29,7 +29,6 @@ ra.defaultMapOptions = {
     displayElevation: null,
     licenseKeys: {
         ORSkey: null,
-        bingkey: "",
         OSTestkey: "",
         OSkey: "",
         mapBoxkey: null,
@@ -304,7 +303,7 @@ ra.isES6 = function () {
     }
 };
 ra.hasMouse = function () {
-   return matchMedia('(pointer:fine)').matches;
+    return matchMedia('(pointer:fine)').matches;
 };
 ra.isRealOject = function (obj) {
     return typeof obj === "object" && obj !== null && obj !== 'undefined';
@@ -452,13 +451,14 @@ ra.logger = (function () {
         var formData = new FormData();
         data.forEach(function (value, index) {
             formData.append("item" + index, value);
+            //  console.log('Logging', value);
         });
-        xmlhttp = new XMLHttpRequest();
+        var xmlhttp = new XMLHttpRequest();
         xmlhttp.onload = function () {
             //  if (xmlhttp.status === 200) {
             //      console.log(xmlhttp.responseText);
             //  } else {
-            console.log('Logging status:', xmlhttp.status);
+            //  console.log('Logging status:', xmlhttp.status);
             //  }
         };
         xmlhttp.open("POST", url, true);
@@ -471,12 +471,21 @@ ra.cookie = (function () {
     var cookie = {};
     cookie.create = function (raobject, name, days) {
         var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toGMTString();
+        switch (true) {
+            case (days < 0):
+                return;
+            case (days === null):
+                return;
+            case (days === 0):
+                expires = '';
+                break;
+            case (days > 0):
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toGMTString();
         }
         document.cookie = name + "=" + raobject + expires + "; path=/;samesite=Strict";
+
     };
     cookie.read = function (name) {
         var nameEQ = name + "=";
@@ -1491,10 +1500,10 @@ if (typeof (ra.html.input) === "undefined") {
 ra.link = (function () {
     var link = {};
     link.getOSMap = function (lat, long, text) {
-        var $out;
-        $out = "<abbr title='Click Map to see Ordnance Survey map of location'>";
-        $out = "<a class='mappopup' href=\"javascript:ra.link.streetmap(" + lat + "," + long + ")\" >[" + text + "]</a>";
-        $out += "</abbr>";
+        var $out='';
+//        $out = "<abbr title='Click Map to see Ordnance Survey map of location'>";
+//        $out = "<a class='mappopup' href=\"javascript:ra.link.streetmap(" + lat + "," + long + ")\" >[" + text + "]</a>";
+//        $out += "</abbr>";
         return $out;
     };
     link.getAreaMap = function ($location, $text) {
@@ -1516,8 +1525,8 @@ ra.link = (function () {
     };
     link.streetmap = function (lat, long) {
         ////https://streetmap.co.uk/loc/N52.038333,W4.578611
-        var page = "https://www.streetmap.co.uk/loc/N" + lat + ",E" + long;
-        window.open(page, "_blank", "scrollbars=yes,width=900,height=580,menubar=yes,resizable=yes,status=yes");
+  //      var page = "https://www.streetmap.co.uk/loc/N" + lat + ",E" + long;
+  //      window.open(page, "_blank", "scrollbars=yes,width=900,height=580,menubar=yes,resizable=yes,status=yes");
     };
     link.googlemap = function ($lat, $long) {
         var page = "https://www.google.com/maps/place/" + $lat.toString() + "+" + $long.toString() + "/@" + $lat.toString() + "," + $long.toString() + ",15z";
@@ -1665,12 +1674,20 @@ ra.modals = (function () {
     };
     document.addEventListener("ra-modal-closing", function (event) {
         //modals.diag("Closing");
-        modals._items.pop();
+        var modalToClose = event.raModal;
+        var i = modals._items.indexOf(modalToClose);
+        if (i < 0) {
+            return;
+        }
+        var last = i + 1 === modals._items.length;
+        modals._items.splice(i, 1);
         if (modals._items.length === 0) {
             modals.masterdiv.innerHTML = '';
         } else {
-            var item = modals._items[modals._items.length - 1];
-            ra.html.setTag(modals.masterdiv, item.getContent());
+            if (last) {
+                var item = modals._items[modals._items.length - 1];
+                ra.html.setTag(modals.masterdiv, item.getContent());
+            }
         }
         // modals.diag("Closing after");
     });
@@ -1719,6 +1736,7 @@ ra.modal = function () {
     };
     this.close = function () {
         let e = new Event("ra-modal-closing");
+        e.raModal = this;
         document.dispatchEvent(e);
         event.stopImmediatePropagation();
         if (this._fullScreenElement !== null) {
