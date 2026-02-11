@@ -212,7 +212,7 @@ ra.walkseditor.form.submitwalk = function (options, data) {
                 const response = JSON.parse(xmlhttp.responseText);
                 response.status = xmlhttp.status;
                 if (response.status === 200) {
-                    ra.bookings.displayFeedback(response.data.feedback);
+                    self.displayFeedback(response.data.feedback);
                     fcn(self, response);
                 } else {
                     ra.showMsg('Whoops - something went wrong [' + action + ']: ' + response.message);
@@ -221,5 +221,32 @@ ra.walkseditor.form.submitwalk = function (options, data) {
         };
         xmlhttp.open("POST", url, true);
         xmlhttp.send(formData);
+    };
+    this.displayFeedback = function (feedback) {
+        if (feedback === null) {
+            ra.showMsg('Invalid response from server, feedback is null');
+            return;
+        }
+        if (feedback.length < 1) {
+            return;
+        }
+        var div = document.createElement("div");
+        div.classList.add('ra');
+        div.classList.add('booking');
+        div.classList.add('feedback');
+        div.style.display = "inline-block";
+        ra.modals.createModal(div, false);
+        if (typeof feedback === 'string') {
+            var div1 = document.createElement("div");
+            div1.innerHTML = feedback;
+            div.appendChild(div1);
+            return;
+        }
+        // array
+        feedback.forEach(item => {
+            var div1 = document.createElement("div");
+            div1.innerHTML = item;
+            div.appendChild(div1);
+        });
     };
 };
