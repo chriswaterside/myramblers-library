@@ -6,9 +6,6 @@ ra._isES6 = null;
 ra._baseDirectory = '';
 ra._jversion = "1.5.0";
 ra.uniquenumber = 0;
-document.addEventListener('DOMContentLoaded', function () {
-    ra.checkLoadingErrors();
-}, false);
 
 ra.defaultMapOptions = {
     divId: "",
@@ -106,18 +103,6 @@ ra.decodeData = function (value) {
     var data = JSON.parse(value);
     value = "";
     return data;
-};
-ra.checkLoadingErrors = function () {
-    //  var errors = "";
-    var res = performance.getEntriesByType("resource");
-    //   var notLoaded = [];
-    for (let item of res) {
-        if ('responseStatus' in item) {
-            if (item.responseStatus > 400) {
-                ra.errors.toServer("loading error", item.name);
-            }
-        }
-    }
 };
 
 // alternatives to alert
