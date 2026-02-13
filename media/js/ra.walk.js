@@ -629,6 +629,30 @@ ra.event = function () {
         }
         return $lasttime;
     };
+    this.getEventDatetime = function () {
+        var earliest = this.basics.getIntValue('bookingdate');
+        this.meeting.forEach(item => {
+            var time = item.getIntValue('bookingtime');
+            if (earliest === null) {
+                earliest = time;
+            } else {
+                if (time < earliest) {
+                    earliest = time;
+                }
+            }
+        });
+        this.start.forEach(item => {
+            var time = item.getIntValue('bookingtime');
+            if (earliest === null) {
+                earliest = time;
+            } else {
+                if (time < earliest) {
+                    earliest = time;
+                }
+            }
+        });
+        return  earliest;
+    };
     this.addTitleSection = function (tag) {
         var nationalGradeCSS = this.getIntValue("walks", "_nationalGradeCSS");
         var content = document.createElement('div');
@@ -1037,7 +1061,9 @@ ra.event.basics = function () {
                 const yesterday = new Date(today);
                 yesterday.setDate(today.getDate() - 1);
                 return this.walkDate > yesterday;
-                
+            case "bookingdate":
+                return this.walkDate;
+
         }
         console.log("Invalid internal request: " + $option);
         return "";
@@ -1317,9 +1343,9 @@ ra.event.timelocation = function () {
                 out = this.w3w;
                 break;
             case "{OSMap}":
-            //    var $lat = this.latitude;
-             //   var $long = this.longitude;
-             //   out = ra.link.getOSMap($lat, $long, "OS Map");
+                //    var $lat = this.latitude;
+                //   var $long = this.longitude;
+                //   out = ra.link.getOSMap($lat, $long, "OS Map");
                 break;
             case "{Directions}":
                 var $lat = this.latitude;
@@ -1343,6 +1369,8 @@ ra.event.timelocation = function () {
                 return this.time;
             case "_type":
                 return this.type;
+            case "bookingtime":
+                return this.time;
         }
         console.log("Invalid internal request: " + $option);
         return "";
