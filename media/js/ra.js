@@ -1485,7 +1485,7 @@ if (typeof (ra.html.input) === "undefined") {
 ra.link = (function () {
     var link = {};
     link.getOSMap = function (lat, long, text) {
-        var $out='';
+        var $out = '';
 //        $out = "<abbr title='Click Map to see Ordnance Survey map of location'>";
 //        $out = "<a class='mappopup' href=\"javascript:ra.link.streetmap(" + lat + "," + long + ")\" >[" + text + "]</a>";
 //        $out += "</abbr>";
@@ -1510,8 +1510,8 @@ ra.link = (function () {
     };
     link.streetmap = function (lat, long) {
         ////https://streetmap.co.uk/loc/N52.038333,W4.578611
-  //      var page = "https://www.streetmap.co.uk/loc/N" + lat + ",E" + long;
-  //      window.open(page, "_blank", "scrollbars=yes,width=900,height=580,menubar=yes,resizable=yes,status=yes");
+        //      var page = "https://www.streetmap.co.uk/loc/N" + lat + ",E" + long;
+        //      window.open(page, "_blank", "scrollbars=yes,width=900,height=580,menubar=yes,resizable=yes,status=yes");
     };
     link.googlemap = function ($lat, $long) {
         var page = "https://www.google.com/maps/place/" + $lat.toString() + "+" + $long.toString() + "/@" + $lat.toString() + "," + $long.toString() + ",15z";
@@ -1648,6 +1648,18 @@ ra.modals = (function () {
         modals.masterdiv.appendChild(item.getContent());
         return item;
     };
+    modals.findIndexById = function (id) {
+        var a = modals._items;
+        for (let i = 0; i < a.length; i++) {
+            if (!(i in a))
+                continue;          // skip hole
+            const item = a[i];
+            if (item && item.id === id) {
+                return i;                    // found
+            }
+        }
+        return null;                        // not found
+    };
     modals.diag = function (title) {
         console.log("Status " + title);
         console.log("No of modals " + modals._items.length);
@@ -1660,8 +1672,8 @@ ra.modals = (function () {
     document.addEventListener("ra-modal-closing", function (event) {
         //modals.diag("Closing");
         var modalToClose = event.raModal;
-        var i = modals._items.indexOf(modalToClose);
-        if (i < 0) {
+        var i = modals.findIndexById(modalToClose.id);
+        if (i === null) {
             return;
         }
         var last = i + 1 === modals._items.length;
@@ -1681,6 +1693,7 @@ ra.modals = (function () {
 ());
 ra.modal = function () {
     this.elements = {};
+    this.id = ra.uniqueID();
     this._content;
     this._fullScreenElement = null;
     // rest of new code is at the end after functions are defined
@@ -1708,6 +1721,10 @@ ra.modal = function () {
     };
     this.getContent = function () {
         return this._content;
+    };
+    this.resetContent = function (newContent) {
+        this.elements.data.innerHTML = '';
+        ra.html.setTag(this.elements.data, newContent);
     };
     this.appendContent = function (extra) {
         var hr = document.createElement("hr");
@@ -1746,6 +1763,7 @@ ra.modal = function () {
             this._content.classList.add("ra-modal-container");
             this.elements = ra.html.generateTags(this._content, tags);
             this.elements.close.setAttribute('data-dismiss', 'modal');
+            this.elements.close.setAttribute('id', this.id);
         }
         this.elements.close.style.display = '';
         this.elements.print.style.display = '';
@@ -1755,6 +1773,12 @@ ra.modal = function () {
         if (!print) {
             this.elements.print.style.display = 'none';
     }
+    };
+    this.hideClose=function(){
+        this.elements.close.style.display = 'none';
+    };
+    this.showClose=function(){
+        this.elements.close.style.display = '';
     };
     this._exitFullscreen = function () {
 
