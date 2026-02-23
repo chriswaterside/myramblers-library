@@ -100,6 +100,7 @@ ra.paginatedTable = function (tag, userOptions = null) {
 //        "options": {
 //            "align": "right"
 //            "view": "notTablet" or "notMobile"
+//            "style": {"min-width":"60px",...}
 //        },
 //        "field": {
 //            "type": "number","text","date"
@@ -107,6 +108,7 @@ ra.paginatedTable = function (tag, userOptions = null) {
 //            "sort": true,
 //            "defaultSort": 'Asc' or 'Desc' 
 //        },
+//        "ignore": true If set then that column is not displayed
 //        view: 'notTablet' or 'notMobile'
 //    }, {...}
 //    ];
@@ -117,6 +119,11 @@ ra.paginatedTable = function (tag, userOptions = null) {
         var row = document.createElement("tr");
         this.noColumns = 0;
         format.forEach(item => {
+            if ('ignore' in item) {
+                if (item.ignore) {
+                    return;
+                }
+            }
             this.noColumns += 1;
             var th = document.createElement("th");
             th.innerText = item.title;
@@ -128,6 +135,12 @@ ra.paginatedTable = function (tag, userOptions = null) {
                 if ('view' in item.options) {
                     th.classList.add(item.options.view);
                 }
+                if ('style' in item.options) {
+                    var items = item.options.style;
+                    for (let item in items) {
+                        th.style.setProperty(item, items[item]);
+                    }
+                }
             }
             if ('field' in item) {
                 if (item.field.sort) {
@@ -138,9 +151,9 @@ ra.paginatedTable = function (tag, userOptions = null) {
                         this.defaultSort.push(item);
                     }
                 }
-
             }
-        });
+        }
+        );
         this.elements.thead.appendChild(row);
     };
     this.tableRowStart = function () {
@@ -148,15 +161,22 @@ ra.paginatedTable = function (tag, userOptions = null) {
         return this.row;
     };
     this.tableRowItem = function (value, item = null, sortValue = null) {
+        if (item !== null) {
+            if ('ignore' in item) {
+                if (item.ignore) {
+                    return null;
+                }
+            }
+        }
         var td = document.createElement("td");
-        td.innerHTML = value;
+        ra.html.setTag(td, value);
         this.row.appendChild(td);
         if (item !== null) {
             if ('field' in item) {
                 var field = this.fields[item.title];
                 field.setValue(td, value);
-                if (sortValue!==null){
-                     field.setSortValue(td, sortValue);
+                if (sortValue !== null) {
+                    field.setSortValue(td, sortValue);
                 }
             }
             if ('options' in item) {

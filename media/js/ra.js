@@ -913,10 +913,10 @@ ra.html = (function () {
         var tag = html.getTag(id);
         if (tag) {
             tag.innerHTML = '';
-            if (typeof innerhtml === 'string') {
-                tag.innerHTML = innerhtml;
-            } else {
+            if (typeof innerhtml === 'object') {
                 tag.appendChild(innerhtml);
+            } else {
+                tag.innerHTML = innerhtml;
             }
         }
     };
@@ -1774,10 +1774,10 @@ ra.modal = function () {
             this.elements.print.style.display = 'none';
     }
     };
-    this.hideClose=function(){
+    this.hideClose = function () {
         this.elements.close.style.display = 'none';
     };
-    this.showClose=function(){
+    this.showClose = function () {
         this.elements.close.style.display = '';
     };
     this._exitFullscreen = function () {
