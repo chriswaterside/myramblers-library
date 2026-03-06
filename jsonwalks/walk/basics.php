@@ -109,6 +109,8 @@ class RJsonwalksWalkBasics implements JsonSerializable {
                 return $this->title;
             case "additionalNotes":
                 return $this->additionalNotes;
+            case "finishDate":
+                return $this->finishDate;
         }
         $app = JFactory::getApplication();
         $app->enqueueMessage("Internal error, invalid Basics value: " . $option);
