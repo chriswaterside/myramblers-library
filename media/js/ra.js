@@ -1628,9 +1628,10 @@ ra.w3w = (function () {
     return w3w;
 }
 ());
+
 ra.modals = (function () {
     var modals = {};
-    modals._items = [];
+    modals._items = new Map();
     modals.masterdiv = null;
     modals.createModal = function ($html, printButton = true, cancelButton = true) {
 
@@ -1642,51 +1643,39 @@ ra.modals = (function () {
         }
         var item = new ra.modal();
         item.setContent($html, printButton, cancelButton);
-        modals._items.push(item);
+        modals._items.set(item.id, item);
         // modals.diag("Create");
         modals.masterdiv.innerHTML = '';
         modals.masterdiv.appendChild(item.getContent());
         return item;
     };
-    modals.findIndexById = function (id) {
-        var a = modals._items;
-        for (let i = 0; i < a.length; i++) {
-            if (!(i in a))
-                continue;          // skip hole
-            const item = a[i];
-            if (item && item.id === id) {
-                return i;                    // found
-            }
+
+    modals.getLastKey = function () {
+        let last = null;
+        for (const x of modals._items.keys()) {
+            last = x;
         }
-        return null;                        // not found
+        return last;
     };
-    modals.diag = function (title) {
-        console.log("Status " + title);
-        console.log("No of modals " + modals._items.length);
-        var i = 1;
-        modals._items.forEach(item => {
-            item.diag(i);
-            i += 1;
-        });
-    };
+
     document.addEventListener("ra-modal-closing", function (event) {
         //modals.diag("Closing");
         var modalToClose = event.raModal;
-        var i = modals.findIndexById(modalToClose.id);
-        if (i === null) {
+        var id = modalToClose.id;
+        var lastId = modals.getLastKey();
+        if (id === null) {
             return;
         }
-        var last = i + 1 === modals._items.length;
-        modals._items.splice(i, 1);
-        if (modals._items.length === 0) {
+        var last = lastId === id;
+        modals._items.delete(id);
+        if (modals._items.size === 0) {
             modals.masterdiv.innerHTML = '';
         } else {
             if (last) {
-                var item = modals._items[modals._items.length - 1];
+                var item = modals._items.get(modals.getLastKey());
                 ra.html.setTag(modals.masterdiv, item.getContent());
             }
         }
-        // modals.diag("Closing after");
     });
     return modals;
 }
